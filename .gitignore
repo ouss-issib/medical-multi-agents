@@ -1,0 +1,31 @@
+# --- Python & Environnement ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+build/
+dist/
+*.egg-info/
+
+# --- Variables d'environnement (CRITIQUE) ---
+# Ne jamais partager vos clés OpenAI sur GitHub
+.env
+.env.local
+.env.*
+
+# --- Outils & IDE ---
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# --- LangGraph & LangChain ---
+.langgraph_cache/
+.langchain_cache/
+*.log
+
+# --- uv (votre gestionnaire de paquets) ---
+.uv/
