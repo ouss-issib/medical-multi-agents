@@ -1,0 +1,8 @@
+{
+  "python_version": "3.13",
+  "dockerfile_lines": [],
+  "graphs": {
+    "medical_workflow": "./app/graph.py:graph"
+  },
+  "env": ".env"
+}
