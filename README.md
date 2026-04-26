@@ -68,23 +68,29 @@ L'application Flutter assure une communication fluide avec le backend, affichant
 Le système a été validé sur trois cas d'études principaux, documentés dans `/screenshots/tests_attendus/`.
 
 ### Cas 1 : Syndrome Viral (Standard)
-- **Initial :** ![Cas 1 Start](./screenshots/tests_attendus/cas1_syndrome_cas_initial.png)
-- **Questions :** ![Cas 1 Q/R](./screenshots/tests_attendus/cas1_syndrome_questions_responses.png)
-- **Validation HITL :** ![Cas 1 HITL](./screenshots/tests_attendus/cas1_syndrome_revue_medecin_HITL.png)
-- **Rapport :** ![Cas 1 Final](./screenshots/tests_attendus/cas1_syndrome_rapport_final.png)
+| Étape | Capture d'écran |
+| :--- | :--- |
+| **Cas Initial** | ![Cas 1 Start](./screenshots/tests_attendus/cas1_syndrome_cas_initial.png) |
+| **Questions/Réponses** | ![Cas 1 Q/R](./screenshots/tests_attendus/cas1_syndrome_questions_responses.png) |
+| **Revue Médecin (HITL)** | ![Cas 1 HITL](./screenshots/tests_attendus/cas1_syndrome_revue_medecin_HITL.png) |
+| **Rapport Final** | ![Cas 1 Final](./screenshots/tests_attendus/cas1_syndrome_rapport_final.png) |
 
 ### Cas 2 : Red Flags (Urgence)
-- **Détection :** ![Cas 2 RedFlags](./screenshots/tests_attendus/cas2_redflags_cas_initial.png)
-- **Questions :** ![Cas 2 Final](./screenshots/tests_attendus/cas2_redflags_questions_responses.png)
-- **Validation HITL :** ![Cas 2 HITL](./screenshots/tests_attendus/cas2_redflags_revue_medecin_HITL.png)
-- **Rapport Urgence :** ![Cas 2 Final](./screenshots/tests_attendus/cas2_redflags_rapport_final.png)
+| Étape | Capture d'écran |
+| :--- | :--- |
+| **Détection** | ![Cas 2 Start](./screenshots/tests_attendus/cas2_redflags_cas_initial.png) |
+| **Questions/Réponses** | ![Cas 2 Q/R](./screenshots/tests_attendus/cas2_redflags_questions_reponses.png) |
+| **Revue Médecin (HITL)** | ![Cas 2 HITL](./screenshots/tests_attendus/cas2_redflags_revue_medecin_HITL.png) |
+| **Rapport Urgence** | ![Cas 2 Final](./screenshots/tests_attendus/cas2_redflags_rapport_final.png) |
 
 ### Cas 3 : Cas Bénin
-- **Synthèse :** ![Cas 3 Resume](./screenshots/consultation_resume.png)
-- **Questions :** ![Cas 3 Final](./screenshots/tests_attendus/cas3_benin_questions_responses.png)
-- **Validation HITL :** ![Cas 3 HITL](./screenshots/tests_attendus/cas3_benin_revue_medecin_HITL.png)
-- **Rapport :** ![Cas 3 Final](./screenshots/tests_attendus/cas3_benin_rapport_final.png)
-- 
+| Étape | Capture d'écran |
+| :--- | :--- |
+| **Synthèse** | ![Cas 3 Resume](./screenshots/tests_attendus/cas3_benin_cas_initial.png) |
+| **Questions/Réponses** | ![Cas 3 Q/R](./screenshots/tests_attendus/cas3_benin_questions_responses.png) |
+| **Revue Médecin (HITL)** | ![Cas 3 HITL](./screenshots/tests_attendus/cas3_benin_revue_medecin_HITL.png) |
+| **Rapport Final** | ![Cas 3 Final](./screenshots/tests_attendus/cas3_benin_rapport_final.png) |
+
 ---
 
 ## 🛠️ Installation et Exécution
