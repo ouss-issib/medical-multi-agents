@@ -1,78 +1,116 @@
 # 🩺 Assistant Médical Intelligent - Multi-Agents & HITL
 
-Ce projet est un système d'assistance à la consultation médicale basé sur une architecture multi-agents utilisant **LangGraph**. Il permet d'automatiser l'interrogatoire patient, de synthétiser les cas cliniques et de générer des rapports médicaux professionnels, tout en garantissant un contrôle humain strict (**Human-in-the-loop**).
+Ce dépôt présente l’implémentation complète d’un **écosystème d'assistance médicale** basé sur une architecture multi-agents utilisant **LangGraph**, **FastAPI**, le protocole **MCP (Model Context Protocol)** et un frontend **Flutter**.
 
-## 🚀 Fonctionnalités Clés
-- **Orchestration Agentique** : Un `Supervisor` central gérant des agents spécialisés (Diagnostic, Review, Report).
-- **Interrogatoire Dynamique** : Cycle de 5 questions adaptatives basées sur les symptômes initiaux du patient.
-- **Human-in-the-Loop (HITL)** : Interruption forcée du flux pour validation médicale avant toute conclusion ou génération de rapport.
-- **Rapports Anonymisés** : Génération automatique de documents professionnels au format Markdown.
-- **Interface Moderne** : Application Flutter suivant une charte graphique médicale soignée (Teal & Slate).
+Le système simule un workflow d'orientation clinique intelligent avec une validation humaine stricte (**Human-in-the-loop**).
+
+Projet réalisé dans le cadre du cours **Agentique AI** encadré par **Mr YOUSSFI Mohamed** (ENSET Mohammedia).
 
 ---
 
-## 🛠️ Architecture Technique
+## 🧩 Architecture du Système
 
-Le système repose sur un graphe d'état (`StateGraph`) complexe qui gère la logique métier et la persistance des données :
+Le projet est découpé en trois piliers technologiques :
 
-1. **Supervisor** : Le cerveau central qui analyse l'état et route vers l'agent approprié.
-2. **Diagnostic Agent** : Analyse les réponses, pose des questions de suivi et suggère des hypothèses cliniques.
-3. **Physician Review** : Nœud de pause critique attendant l'approbation et le traitement du médecin.
-4. **Report Agent** : Agent final responsable de la mise en forme du dossier médical.
+1.  **Backend (LangGraph + FastAPI)** : Orchestration agentique via un `Supervisor` pattern.
+2.  **MCP Server** : Fournit des outils contextuels et des ressources médicales aux agents.
+3.  **Frontend (Flutter)** : Interface utilisateur mobile pour la consultation et le rapport final.
 
 ---
 
-## 📦 Installation et Configuration
+## 🧠 1. Workflow LangGraph & Agents
 
-### 1. Prérequis
-- Flutter & Dart (dernière version stable)
-- Python 3.10+
-- Clé API OpenAI
-- Clé API LangChain (pour le tracing et LangGraph Studio)
+Le cœur du système repose sur un graphe d'état supervisé où chaque transition est contrôlée par un agent central.
 
-### 2. Backend (Python & LangGraph)
+- **Supervisor** : Orchestre le flux entre les agents.
+- **Diagnostic Agent** : Mène l'interrogatoire (limité à 5 questions) et produit la synthèse.
+- **Physician Review (HITL)** : Point d'interruption forcé pour validation médicale.
+- **Report Agent** : Génère le compte-rendu final au format Markdown.
+
+### 📸 Visualisation du Graphe (LangGraph Studio)
+
+| Graphe de Consultation | État du Thread (Memory) |
+| :--- | :--- |
+| ![Consultation Flow](./screenshots/consultation_by_thread.png) | ![Session Start](./screenshots/session_start.png) |
+
+---
+
+## 📚 2. Serveur MCP & API
+
+Le **MCP Server** permet d'étendre les capacités des agents en leur offrant un accès sécurisé à des outils de diagnostic et des bases de connaissances.
+
+### 📸 Backend & Tools
+
+| API Swagger (FastAPI) | MCP Server Response |
+| :--- | :--- |
+| ![FastAPI Docs](./screenshots/fastapi_swagger_docs.png) | ![MCP Response](./screenshots/mcp_server_response.png) |
+
+| Logs API & MCP | Pytest (Validation) |
+| :--- | :--- |
+| ![Logs](./screenshots/logs_fastapi_mcpserver.png) | ![Pytest](./screenshots/pytest_consultation.png) |
+
+---
+
+## 💬 3. Interface Frontend Flutter
+
+L'application Flutter assure une communication fluide avec le backend, affichant les questions de l'agent en temps réel et le rapport médical final.
+
+### 📸 Captures UI
+
+| Démarrage Consultation | Chargement Agentique | Rapport Final |
+| :--- | :--- | :--- |
+| ![Start](./screenshots/consultation_start.png) | ![Loading](./screenshots/loading_consultation_flutter.png) | ![Report](./screenshots/consultation_report.png) |
+
+---
+
+## 🧪 4. Jeux de Tests Validés (Scénarios Cliniques)
+
+Le système a été validé sur trois cas d'études principaux, documentés dans `/screenshots/tests_attendus/`.
+
+### Cas 1 : Syndrome Viral (Standard)
+- **Initial :** ![Cas 1 Start](./screenshots/tests_attendus/cas1_syndrome_cas_initial.png)
+- **Questions :** ![Cas 1 Q/R](./screenshots/tests_attendus/cas1_syndrome_questions_responses.png)
+- **Validation HITL :** ![Cas 1 HITL](./screenshots/tests_attendus/cas1_syndrome_revue_medecin_HITL.png)
+- **Rapport :** ![Cas 1 Final](./screenshots/tests_attendus/cas1_syndrome_rapport_final.png)
+
+### Cas 2 : Red Flags (Urgence)
+- **Détection :** ![Cas 2 RedFlags](./screenshots/tests_attendus/cas2_redflags_cas_initial.png)
+- **Questions :** ![Cas 2 Final](./screenshots/tests_attendus/cas2_redflags_questions_responses.png)
+- **Validation HITL :** ![Cas 2 HITL](./screenshots/tests_attendus/cas2_redflags_revue_medecin_HITL.png)
+- **Rapport Urgence :** ![Cas 2 Final](./screenshots/tests_attendus/cas2_redflags_rapport_final.png)
+
+### Cas 3 : Cas Bénin
+- **Synthèse :** ![Cas 3 Resume](./screenshots/consultation_resume.png)
+- **Questions :** ![Cas 3 Final](./screenshots/tests_attendus/cas3_benin_questions_responses.png)
+- **Validation HITL :** ![Cas 3 HITL](./screenshots/tests_attendus/cas3_benin_revue_medecin_HITL.png)
+- **Rapport :** ![Cas 3 Final](./screenshots/tests_attendus/cas3_benin_rapport_final.png)
+- 
+---
+
+## 🛠️ Installation et Exécution
+
+### Backend
 ```bash
 cd backend
 python -m venv .venv
-# Activation sur Windows
-.venv\Scripts\activate
-# Installation des dépendances
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-Créez un fichier .env dans le dossier backend :
+uvicorn main:app --reload
+```
 
-Code snippet
-OPENAI_API_KEY=votre_cle_openai
-LANGCHAIN_API_KEY=votre_cle_langsmith
-LANGCHAIN_TRACING_V2=true
-LANGCHAIN_PROJECT="Medical-Assistant-MultiAgents"
-3. Frontend (Flutter)
-Bash
+### Serveur MCP
+```bash
+cd mcp_server
+python mcp_server.py
+```
+
+### Frontend
+```bash
 cd frontend
 flutter pub get
-🏃 Exécution
-Démarrer le Backend (FastAPI)
-Bash
-cd backend
-uvicorn app.main:app --reload
-Démarrer le Frontend (Flutter)
-Bash
-cd frontend
 flutter run
-Visualisation dans LangGraph Studio
-Ouvrez l'application LangGraph Studio.
-
-Sélectionnez le dossier backend.
-
-Le graphe s'affichera automatiquement, vous permettant de tester les interruptions en temps réel.
-
-🧪 Jeux de Tests Validés
-Le système a été validé sur trois scénarios critiques :
-
-Cas 1 : Syndrome respiratoire simple (Infection virale classique).
-
-Cas 2 : Red Flags / Urgence (Suspicion de Syndrome Coronarien Aigu).
-
-Cas 3 : Cas Bénin (Céphalée de tension liée à la fatigue).
-
+```
 👥 Auteur
-Projet réalisé dans le cadre du TP Multi-Agents - Agentic AI.
+Oussama Issib
+
+Note : Ce système est une preuve de concept (PoC) et ne remplace en aucun cas une consultation médicale réelle.
