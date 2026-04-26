@@ -27,7 +27,7 @@ Le cœur du système repose sur un graphe d'état supervisé où chaque transiti
 - **Physician Review (HITL)** : Point d'interruption forcé pour validation médicale.
 - **Report Agent** : Génère le compte-rendu final au format Markdown.
 
-### 📸 Visualisation du Graphe (LangGraph Studio)
+### 📸 Visualisation Fast API
 
 | Graphe de Consultation | État du Thread (Memory) |
 | :--- | :--- |
