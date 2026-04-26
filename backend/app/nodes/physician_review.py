@@ -2,10 +2,9 @@ from app.state import MedicalState
 
 def physician_node(state: MedicalState) -> dict:
     """
-    Passive node. Acts as an interrupt boundary for Human-in-the-Loop.
-    LangGraph will pause BEFORE this node executes.
-    When resumed via API, the state is updated directly.
+    Cette étape est une interruption Human-in-the-Loop.
+    Le médecin reçoit la synthèse et propose un traitement.
     """
-    # If this executes, it means the physician has reviewed it and the state was updated.
-    # We simply route back to the supervisor.
+    # Ce nœud ne contient pas de logique LLM car c'est l'humain qui saisit la donnée.
+    # On s'assure simplement que le 'next' pointe vers le Supervisor pour la suite.
     return {"next": "Supervisor"}

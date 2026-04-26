@@ -1,48 +1,54 @@
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import AIMessage, ToolMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from app.state import MedicalState
-from app.tools.patient_tools import ask_patient
 from app.tools.care_tools import recommend_interim_care
 
 def diagnostic_node(state: MedicalState) -> dict:
-    """
-    Handles patient Q&A up to 5 questions.
-    Executes tools immediately to prevent OpenAI 400 Bad Request errors.
-    """
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-    llm_with_tools = llm.bind_tools([ask_patient, recommend_interim_care])
-    
     messages = state.get("messages", [])
-    q_count = state.get("question_count", 0)
     
-    if q_count < 5:
-        response = llm_with_tools.invoke(messages)
-        new_messages = [response]
-        
-        # CRITICAL FIX: Ensure every tool_call receives a matching ToolMessage
-        if response.tool_calls:
-            for tool_call in response.tool_calls:
-                if tool_call["name"] == "ask_patient":
-                    tool_result = ask_patient.invoke(tool_call["args"])
-                    new_messages.append(ToolMessage(content=tool_result, tool_call_id=tool_call["id"]))
-                elif tool_call["name"] == "recommend_interim_care":
-                    tool_result = recommend_interim_care.invoke(tool_call["args"])
-                    new_messages.append(ToolMessage(content=tool_result, tool_call_id=tool_call["id"]))
+    # 1. Calcul dynamique et exact basé sur le patient
+    human_messages = [m for m in messages if getattr(m, "type", "") == "human"]
+    
+    # Le nombre de réponses apportées par le patient (0 au début, 1 au 1er /answer)
+    answers_given = len(human_messages) - 1
 
-        return {
-            "messages": new_messages,
-            "question_count": q_count + 1
-        }
-    else:
-        # Generate final diagnostic synthesis
-        summary_prompt = "Based on the conversation, provide a preliminary clinical synthesis. Do not diagnose."
-        messages.append(AIMessage(content=summary_prompt))
-        summary = llm.invoke(messages).content
+    # 2. Boucle : on s'arrête strictement après 5 réponses du patient
+    if answers_given < 5:
+        prompt = [
+            SystemMessage(
+                content=f"Tu es un assistant médical. Pose une seule question pertinente (Question {answers_given + 1}/5) pour clarifier les symptômes. Sois très bref."
+            )
+        ] + messages
         
-        interim = recommend_interim_care.invoke({"symptoms": summary})
+        response = llm.invoke(prompt)
+        
+        return {
+            "messages": [response],
+            "question_count": answers_given, # Renvoie 0 au /start, 1 au premier /answer, etc.
+            "next": "Supervisor"
+        }
+    
+    else:
+        #3. Phase de synthèse
+        summary_prompt = messages + [
+            HumanMessage(content="""Génère une synthèse clinique courte. 
+            CONSIGNE D'ANONYMAT : Ne mentionne JAMAIS 'Patient', 'Nom' ou 'Date'. 
+            N'utilise pas de crochets comme [Nom]. Commence directement par 'Synthèse : '.""")
+        ]
+        
+        summary = llm.invoke(summary_prompt).content
+        
+        # Appel MCP sécurisé
+        try:
+            care = recommend_interim_care.invoke({"symptoms": summary})
+        except Exception as e:
+            print(f"Erreur outil MCP : {e}")
+            care = "En attente de l'avis du médecin." # Fallback de sécurité
         
         return {
             "diagnostic_summary": summary,
-            "interim_care": interim,
-            "next": "physician_review" # Routing logic preserved perfectly
+            "interim_care": care,
+            "question_count": answers_given, # On bloque le compteur à 5 pour Flutter
+            "next": "Supervisor"
         }
