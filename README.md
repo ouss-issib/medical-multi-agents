@@ -95,22 +95,31 @@ Le système a été validé sur trois cas d'études principaux, documentés dans
 
 ## 🛠️ Installation et Exécution
 
-### Backend
+### 1. Backend (LangGraph & FastAPI)
 ```bash
 cd backend
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-uvicorn main:app --reload
+uvicorn app.api:app --reload --env-file .env --host 0.0.0.0 --port 8000         
 ```
 
-### Serveur MCP
+### 2. Lancement du serveur de développement (LangGraph Dev)
+Pour visualiser et tester le workflow dans LangGraph Studio :
+```bash
+# Nécessite Docker installé et lancé
+pip install langgraph-cli
+langgraph dev
+```
+Cette commande démarrera l'API de développement et fournira un lien vers LangGraph Studio local.
+
+### 3. Serveur MCP (Medical Context)
 ```bash
 cd mcp_server
 python mcp_server.py
 ```
 
-### Frontend
+### 4. Frontend (Flutter)
 ```bash
 cd frontend
 flutter pub get
