@@ -1,57 +1,48 @@
-import os
-from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from langchain_core.messages import AIMessage, ToolMessage
 from app.state import MedicalState
+from app.tools.patient_tools import ask_patient
+from app.tools.care_tools import recommend_interim_care
 
-# Section 6 : Chargement de l'environnement
-load_dotenv()
-
-# Section 4.1 : Température à 0.7 pour éviter la répétition monotone
-llm = ChatOpenAI(model="gpt-4o", temperature=0.7)
-
-def diagnostic_node(state: MedicalState):
+def diagnostic_node(state: MedicalState) -> dict:
     """
-    Pose 5 questions successives et variées (Section 4.3 & 5).
+    Handles patient Q&A up to 5 questions.
+    Executes tools immediately to prevent OpenAI 400 Bad Request errors.
     """
-    current_count = state.get("question_count", 0)
-    messages = state.get("messages", [])
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    llm_with_tools = llm.bind_tools([ask_patient, recommend_interim_care])
     
-    print(f"--- DIAGNOSTIC AGENT: Question {current_count + 1}/5 ---")
+    messages = state.get("messages", [])
+    q_count = state.get("question_count", 0)
+    
+    if q_count < 5:
+        response = llm_with_tools.invoke(messages)
+        new_messages = [response]
+        
+        # CRITICAL FIX: Ensure every tool_call receives a matching ToolMessage
+        if response.tool_calls:
+            for tool_call in response.tool_calls:
+                if tool_call["name"] == "ask_patient":
+                    tool_result = ask_patient.invoke(tool_call["args"])
+                    new_messages.append(ToolMessage(content=tool_result, tool_call_id=tool_call["id"]))
+                elif tool_call["name"] == "recommend_interim_care":
+                    tool_result = recommend_interim_care.invoke(tool_call["args"])
+                    new_messages.append(ToolMessage(content=tool_result, tool_call_id=tool_call["id"]))
 
-    if current_count < 5:
-        # PROMPT DE DIVERSITÉ : On interdit la répétition
-        system_instructions = (
-            f"Vous êtes un assistant médical professionnel. C'est la question n°{current_count + 1} sur 5. "
-            "INSTRUCTION CRITIQUE : Lisez attentivement l'historique des messages ci-dessous. "
-            "NE POSEZ PAS une question sur un sujet déjà abordé. "
-            "Variez impérativement vos questions parmi ces thèmes : "
-            "1. Durée et début des symptômes. "
-            "2. Intensité de la douleur/gêne (échelle 1-10). "
-            "3. Signes associés (fièvre, nausées, vertiges). "
-            "4. Antécédents médicaux ou allergies. "
-            "5. Facteurs déclenchants ou aggravants. "
-            "Posez UNE seule question courte, claire et pertinente."
-        )
-        
-        # On passe TOUT l'historique pour que le LLM voit ses propres questions précédentes
-        response = llm.invoke([("system", system_instructions)] + messages)
-        
         return {
-            "messages": [response],
-            "question_count": current_count + 1,
-            "next": "supervisor"
+            "messages": new_messages,
+            "question_count": q_count + 1
         }
     else:
-        # Section 4.1 & 4.4 : Phase de synthèse clinique et recommandation intermédiaire
-        print("--- DIAGNOSTIC AGENT: Phase de synthèse ---")
-        summary_prompt = (
-            "En vous basant sur l'échange précédent, produisez une synthèse clinique préliminaire "
-            "et proposez une recommandation intermédiaire prudente (repos, hydratation, etc.)."
-        )
-        response = llm.invoke(messages + [("system", summary_prompt)])
+        # Generate final diagnostic synthesis
+        summary_prompt = "Based on the conversation, provide a preliminary clinical synthesis. Do not diagnose."
+        messages.append(AIMessage(content=summary_prompt))
+        summary = llm.invoke(messages).content
+        
+        interim = recommend_interim_care.invoke({"symptoms": summary})
         
         return {
-            "diagnostic_summary": response.content,
-            "interim_care": "Repos, surveillance de la température et hydratation.",
-            "next": "supervisor"
+            "diagnostic_summary": summary,
+            "interim_care": interim,
+            "next": "physician_review" # Routing logic preserved perfectly
         }

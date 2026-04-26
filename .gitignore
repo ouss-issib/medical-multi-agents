@@ -29,3 +29,7 @@ dist/
 
 # --- uv (votre gestionnaire de paquets) ---
 .uv/
+
+# Ignore LangGraph Studio checkpoints and Python cache
+.langgraph_api/
+*.pckl

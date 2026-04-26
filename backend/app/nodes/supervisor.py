@@ -1,40 +1,33 @@
-import os
-from typing import Literal
-from pydantic import BaseModel
-from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from app.state import MedicalState
+from pydantic import BaseModel
+from typing import Literal
 
-load_dotenv()
-llm = ChatOpenAI(model="gpt-4o", temperature=0)
+class RouteResponse(BaseModel):
+    next: Literal["diagnostic_agent", "physician_review", "report_agent", "FINISH"]
 
-class Router(BaseModel):
-    """Schéma de routage imposé par la Section 8"""
-    next_step: Literal["diagnostic_agent", "physician_review", "report_agent", "FINISH"]
+def supervisor_router(state: MedicalState) -> dict:
+    """
+    Orchestrates the workflow deterministically to prevent LLM loops.
+    Decides the next node strictly based on the presence of data in the state.
+    """
+    q_count = state.get("question_count", 0)
+    has_summary = bool(state.get("diagnostic_summary"))
+    has_physician = bool(state.get("physician_treatment"))
+    has_report = bool(state.get("final_report"))
 
-def supervisor_node(state: MedicalState):
-    """Orchestre le workflow (Section 4.1 et 5)"""
-    print(f"--- SUPERVISOR: Décision de l'étape suivante ---")
-    
-    count = state.get("question_count", 0)
-    summary = state.get("diagnostic_summary")
-    treatment = state.get("physician_treatment")
-    
-    # 1. Logique de décision déterministe pour respecter le workflow minimal
-    if count < 5:
+    # 1. If we haven't hit 5 questions, keep interviewing
+    if q_count < 5 and not has_summary:
         return {"next": "diagnostic_agent"}
-    
-    if summary and not treatment:
+        
+    # 2. If the interview is done but the doctor hasn't reviewed it, pause for HITL
+    elif has_summary and not has_physician:
         return {"next": "physician_review"}
-    
-    if treatment and not state.get("final_report"):
+        
+    # 3. If the doctor added a treatment, generate the report
+    elif has_physician and not has_report:
         return {"next": "report_agent"}
-    
-    if state.get("final_report"):
-        return {"next": "FINISH"}
-
-    # 2. Secours par LLM si besoin de routage intelligent
-    structured_llm = llm.with_structured_output(Router)
-    response = structured_llm.invoke(state["messages"] + [("system", "Décidez de la prochaine étape médicale.")])
-    
-    return {"next": response.next_step}
+        
+    # 4. If everything is done, end the graph
+    return {"next": "FINISH"}

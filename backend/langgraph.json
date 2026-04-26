@@ -1,6 +1,6 @@
+
 {
-  "python_version": "3.13",
-  "dockerfile_lines": [],
+  "dependencies": ["."],
   "graphs": {
     "medical_workflow": "./app/graph.py:graph"
   },

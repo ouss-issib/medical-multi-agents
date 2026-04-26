@@ -1,10 +1,9 @@
 from langchain_core.tools import tool
 
 @tool
-def ask_patient(question: str):
+def ask_patient(question: str) -> str:
     """
-    Pose une question spécifique au patient pour affiner le diagnostic.
-    Cet outil doit être utilisé exactement 5 fois.
+    Use this tool to ask the patient a clinical question.
+    In an API context, this tool pauses the agent and returns the question to the user.
     """
-    # Dans une application réelle, cela enverrait une notification au frontend
-    return f"Question posée : {question}. En attente de la réponse patient..."
+    return f"QUESTION_FOR_PATIENT: {question}"

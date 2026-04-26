@@ -1,0 +1,23 @@
+# --- Cœur de l'application  ---
+langgraph
+langchain
+langchain-openai
+python-dotenv
+typing-extensions>=4.8.0
+# --- API et Serveur  ---
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+
+# --- Protocole MCP  ---
+mcp
+
+# --- Frontend  ---
+streamlit
+requests
+
+# --- Outils de développement  ---
+langgraph-cli[inmem]
+
+

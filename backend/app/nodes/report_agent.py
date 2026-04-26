@@ -1,27 +1,29 @@
-import os
-from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
 from app.state import MedicalState
 
-load_dotenv()
-
-def report_node(state: MedicalState):
-    """Génère le rapport final structuré (Section 4.1)."""
-    print("--- REPORT AGENT: Génération du rapport final ---")
+def report_node(state: MedicalState) -> dict:
+    """
+    Generates the final structured report and appends the mandatory ethical disclaimer.
+    """
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     
-    summary = state.get("diagnostic_summary", "Non disponible")
-    treatment = state.get("physician_treatment", "Non spécifié par le médecin")
+    summary = state.get("diagnostic_summary", "N/A")
+    care = state.get("interim_care", "N/A")
+    treatment = state.get("physician_treatment", "N/A")
     
-    # MENTION LÉGALE STRICTE (Section 2)
-    disclaimer = "Ce système ne remplace pas une consultation médicale."
+    prompt = f"""
+    Generate a highly structured medical report in Markdown based on:
+    - Clinical Synthesis: {summary}
+    - Interim Care: {care}
+    - Physician Treatment Plan: {treatment}
     
-    report_content = (
-        f"### RAPPORT D'ORIENTATION CLINIQUE\n\n"
-        f"**SYNTHÈSE CLINIQUE PRÉLIMINAIRE :**\n{summary}\n\n"
-        f"**TRAITEMENT / CONDUITE À TENIR (MÉDECIN) :**\n{treatment}\n\n"
-        f"--- \n*Note : {disclaimer}*"
-    )
+    You MUST end the report with this exact phrasing:
+    "Ce système ne remplace pas une consultation médicale."
+    """
+    
+    response = llm.invoke(prompt)
     
     return {
-        "final_report": report_content,
-        "next": "supervisor"
+        "final_report": response.content,
+        "next": "FINISH"
     }

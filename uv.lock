@@ -195,6 +195,24 @@ wheels = [
 ]
 
 [[package]]
+name = "claude-agent-sdk"
+version = "0.1.68"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "mcp" },
+    { name = "sniffio" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/27/cb/a3e2250bba1d6e7a41e34f832dbb1427ec1391d59897189d429b2875952a/claude_agent_sdk-0.1.68.tar.gz", hash = "sha256:5f8c9e29f08852878ed8ba9f91cff0287d069002b9522497c3229a5bd3e483ac", size = 239251, upload-time = "2026-04-25T02:06:35.599Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cf/84/347e9ecc4e293b6a0a80557a5527d0e0b28bfdd6c4ce9fac907436a606b9/claude_agent_sdk-0.1.68-py3-none-macosx_11_0_arm64.whl", hash = "sha256:4e5228ffeae2bfa195e2526c446b5a926a1f4015da35e3efd142f817cf2c6dfb", size = 63221614, upload-time = "2026-04-25T02:06:38.805Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/18/e83cdf6c1e7025e735b546b83ff88fcb9762082e61b068a9e52c280caee6/claude_agent_sdk-0.1.68-py3-none-macosx_11_0_x86_64.whl", hash = "sha256:4aeb266002b7ca97167072cf04bc3098db5bc8d2daa08a6f84ed29f2d48e2545", size = 65187622, upload-time = "2026-04-25T02:06:42.245Z" },
+    { url = "https://files.pythonhosted.org/packages/aa/6c/70769392db3f8717afd48d0c2a5f1b8524f030ef42f203bac4f07f2ab443/claude_agent_sdk-0.1.68-py3-none-manylinux_2_17_aarch64.whl", hash = "sha256:2053151067347dd2b980f59632478f14b5323b627efb97fea41233e8bf891831", size = 76635725, upload-time = "2026-04-25T02:06:46.448Z" },
+    { url = "https://files.pythonhosted.org/packages/b9/61/4b6f08a5d92a8077e5a29af1ba69f04c9465082781061b9271e981092287/claude_agent_sdk-0.1.68-py3-none-manylinux_2_17_x86_64.whl", hash = "sha256:59c7873e39ac7aa572fae25466abc5c34abb3da64eaf60790ed9ddd6dd4759b7", size = 76613056, upload-time = "2026-04-25T02:06:50.427Z" },
+    { url = "https://files.pythonhosted.org/packages/8b/c1/3bd1f00529aa1b43f6f57d18ebe5272c3f4cec4bc25f543d78562639a932/claude_agent_sdk-0.1.68-py3-none-win_amd64.whl", hash = "sha256:6f06b744bf20a82d937a3ac705b26807f14936ec1b0c79349208e11a2e89413b", size = 78349055, upload-time = "2026-04-25T02:06:53.919Z" },
+]
+
+[[package]]
 name = "click"
 version = "8.3.3"
 source = { registry = "https://pypi.org/simple" }
@@ -370,6 +388,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/ce/cc/762dfb036166873f0059f3b7de4565e1b5bc3d6f28a414c13da27e442f99/idna-3.13.tar.gz", hash = "sha256:585ea8fe5d69b9181ec1afba340451fba6ba764af97026f92a91d4eef164a242", size = 194210, upload-time = "2026-04-22T16:42:42.314Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5d/13/ad7d7ca3808a898b4612b6fe93cde56b53f3034dcde235acb1f0e1df24c6/idna-3.13-py3-none-any.whl", hash = "sha256:892ea0cde124a99ce773decba204c5552b69c3c67ffd5f232eb7696135bc8bb3", size = 68629, upload-time = "2026-04-22T16:42:40.909Z" },
+]
+
+[[package]]
+name = "iniconfig"
+version = "2.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/72/34/14ca021ce8e5dfedc35312d08ba8bf51fdd999c576889fc2c24cb97f4f10/iniconfig-2.3.0.tar.gz", hash = "sha256:c76315c77db068650d49c5b56314774a7804df16fee4402c1f19d6d15d8c4730", size = 20503, upload-time = "2025-10-18T21:55:43.219Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cb/b1/3846dd7f199d53cb17f49cba7e651e9ce294d8497c8c150530ed11865bb8/iniconfig-2.3.0-py3-none-any.whl", hash = "sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12", size = 7484, upload-time = "2025-10-18T21:55:41.639Z" },
 ]
 
 [[package]]
@@ -608,6 +635,11 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/f3/8d/3ca31ae3a4a437191243ad6d9061ede9367440bb7dc9a0da1ecc2c2a4865/langsmith-0.7.36-py3-none-any.whl", hash = "sha256:e1657a795f3f1982bb8d34c98b143b630ca3eee9de2c10e670c9105233b54654", size = 381808, upload-time = "2026-04-24T16:58:04.572Z" },
 ]
 
+[package.optional-dependencies]
+claude-agent-sdk = [
+    { name = "claude-agent-sdk" },
+]
+
 [[package]]
 name = "markupsafe"
 version = "3.0.3"
@@ -691,10 +723,14 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "fastapi" },
+    { name = "httpx" },
     { name = "langchain-openai" },
     { name = "langgraph" },
+    { name = "langsmith", extra = ["claude-agent-sdk"] },
     { name = "mcp" },
     { name = "pydantic" },
+    { name = "pytest" },
+    { name = "pytest-dotenv" },
     { name = "python-dotenv" },
     { name = "requests" },
     { name = "streamlit" },
@@ -704,10 +740,14 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi", specifier = ">=0.136.1" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "langchain-openai", specifier = ">=1.2.1" },
     { name = "langgraph", specifier = ">=1.1.9" },
+    { name = "langsmith", extras = ["claude-agent-sdk"], specifier = ">=0.7.36" },
     { name = "mcp", specifier = ">=1.27.0" },
     { name = "pydantic", specifier = ">=2.13.3" },
+    { name = "pytest", specifier = ">=9.0.3" },
+    { name = "pytest-dotenv", specifier = ">=0.5.2" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "requests", specifier = ">=2.33.1" },
     { name = "streamlit", specifier = ">=1.56.0" },
@@ -972,6 +1012,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pluggy"
+version = "1.6.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz", hash = "sha256:7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3", size = 69412, upload-time = "2025-05-15T12:30:07.975Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746", size = 20538, upload-time = "2025-05-15T12:30:06.134Z" },
+]
+
+[[package]]
 name = "protobuf"
 version = "7.34.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1130,6 +1179,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pygments"
+version = "2.20.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c3/b2/bc9c9196916376152d655522fdcebac55e66de6603a76a02bca1b6414f6c/pygments-2.20.0.tar.gz", hash = "sha256:6757cd03768053ff99f3039c1a36d6c0aa0b263438fcab17520b30a303a82b5f", size = 4955991, upload-time = "2026-03-29T13:29:33.898Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f4/7e/a72dd26f3b0f4f2bf1dd8923c85f7ceb43172af56d63c7383eb62b332364/pygments-2.20.0-py3-none-any.whl", hash = "sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176", size = 1231151, upload-time = "2026-03-29T13:29:30.038Z" },
+]
+
+[[package]]
 name = "pyjwt"
 version = "2.12.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1141,6 +1199,35 @@ wheels = [
 [package.optional-dependencies]
 crypto = [
     { name = "cryptography" },
+]
+
+[[package]]
+name = "pytest"
+version = "9.0.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "iniconfig" },
+    { name = "packaging" },
+    { name = "pluggy" },
+    { name = "pygments" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7d/0d/549bd94f1a0a402dc8cf64563a117c0f3765662e2e668477624baeec44d5/pytest-9.0.3.tar.gz", hash = "sha256:b86ada508af81d19edeb213c681b1d48246c1a91d304c6c81a427674c17eb91c", size = 1572165, upload-time = "2026-04-07T17:16:18.027Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d4/24/a372aaf5c9b7208e7112038812994107bc65a84cd00e0354a88c2c77a617/pytest-9.0.3-py3-none-any.whl", hash = "sha256:2c5efc453d45394fdd706ade797c0a81091eccd1d6e4bccfcd476e2b8e0ab5d9", size = 375249, upload-time = "2026-04-07T17:16:16.13Z" },
+]
+
+[[package]]
+name = "pytest-dotenv"
+version = "0.5.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+    { name = "python-dotenv" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cd/b0/cafee9c627c1bae228eb07c9977f679b3a7cb111b488307ab9594ba9e4da/pytest-dotenv-0.5.2.tar.gz", hash = "sha256:2dc6c3ac6d8764c71c6d2804e902d0ff810fa19692e95fe138aefc9b1aa73732", size = 3782, upload-time = "2020-06-16T12:38:03.4Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d0/da/9da67c67b3d0963160e3d2cbc7c38b6fae342670cc8e6d5936644b2cf944/pytest_dotenv-0.5.2-py3-none-any.whl", hash = "sha256:40a2cece120a213898afaa5407673f6bd924b1fa7eafce6bda0e8abffe2f710f", size = 3993, upload-time = "2020-06-16T12:38:01.139Z" },
 ]
 
 [[package]]

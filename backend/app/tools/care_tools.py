@@ -1,12 +1,16 @@
 from langchain_core.tools import tool
+from app.tools.mcp_client import mcp_client
 
 @tool
-def recommend_interim_care(summary: str):
+def recommend_interim_care(symptoms: str) -> str:
     """
-    Génère des conseils de soins intermédiaires basés sur la synthèse.
-    Note : Ces conseils sont préventifs et non définitifs.
+    Use this tool to generate safe, preliminary interim care recommendations 
+    (e.g., rest, hydration) based on current symptoms.
     """
-    return (
-        "Recommandations suggérées : Repos strict, hydratation abondante "
-        "et surveillance de la température toutes les 4 heures."
-    )
+    # Extract a simple keyword to query the MCP server based on the summary
+    keyword = "fever" if "fièvre" in symptoms.lower() or "fever" in symptoms.lower() else "cough"
+    
+    # Fetch real data from the MCP microservice!
+    guidelines = mcp_client.fetch_clinical_guidelines(keyword)
+    
+    return f"Recommandation (Source: MCP Server) - {guidelines}"
